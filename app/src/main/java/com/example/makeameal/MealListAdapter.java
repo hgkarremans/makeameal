@@ -1,6 +1,7 @@
 package com.example.makeameal;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.Layout;
@@ -47,7 +48,9 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
         mealViewHolder.price.setText("Price: €" + meal.getPrice());
 
         //set image
-        Picasso.get().load(meal.getImageUrl()).into(mealViewHolder.image);
+        Picasso.get()
+                .load(meal.getImageUrl())
+                .into(mealViewHolder.image);
 
 
 
@@ -86,6 +89,11 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
         @Override
         public void onClick(View view) {
             Log.d(TAG, "ViewHolder " + getAdapterPosition()+ " clicked");
+            Intent intent = new Intent(view.getContext(), MealLayout.class);
+            intent.putExtra("meal",  meals.get(getAdapterPosition()));
+            view.getContext().startActivity(intent);
+
         }
+
     }
 }

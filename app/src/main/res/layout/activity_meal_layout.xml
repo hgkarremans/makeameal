@@ -4,12 +4,13 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/light_blue"
     tools:context=".MealLayout">
 
     <ImageView
         android:id="@+id/mealimage"
-        android:layout_width="224dp"
-        android:layout_height="224dp"
+        android:layout_width="374dp"
+        android:layout_height="259dp"
         android:layout_marginStart="16dp"
         android:layout_marginTop="16dp"
         app:layout_constraintStart_toStartOf="parent"
@@ -21,23 +22,35 @@
         android:id="@+id/name_cook"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="40dp"
-        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:textSize="14dp"
+        android:layout_marginBottom="8dp"
         android:text="@string/name_of_cook"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/mealimage"
-        app:layout_constraintTop_toTopOf="parent" />
+        android:textStyle="italic"
+        app:layout_constraintBottom_toTopOf="@+id/participants"
+        app:layout_constraintEnd_toEndOf="parent" />
 
+    <TextView
+        android:id="@+id/participants"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="32dp"
+        android:layout_marginBottom="32dp"
+        android:text="participants"
+        android:textSize="14dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <TextView
         android:id="@+id/mealname"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="8dp"
-        android:textStyle="bold"
         android:text="@string/mealname_label"
-        android:textSize="24dp"
+        android:textSize="18dp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mealimage" />
 
@@ -45,10 +58,11 @@
         android:id="@+id/mealdescription"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginStart="32dp"
+        android:layout_marginStart="16dp"
         android:layout_marginTop="4dp"
         android:text="@string/lorem_ipsum_dolor"
         android:textStyle="italic"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mealname" />
 
@@ -67,9 +81,9 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:layout_marginEnd="32dp"
+        android:layout_marginEnd="24dp"
         android:text="isVega"
-        app:layout_constraintEnd_toEndOf="@+id/mealdescription"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/mealdescription" />
 
     <TextView
@@ -91,16 +105,6 @@
         app:layout_constraintTop_toBottomOf="@+id/allergenes" />
 
     <TextView
-        android:id="@+id/maxamountofparticipants"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:text="maxAmountOfParticipants"
-        app:layout_constraintEnd_toEndOf="@+id/name_cook"
-        app:layout_constraintStart_toEndOf="@+id/mealimage"
-        app:layout_constraintTop_toBottomOf="@+id/name_cook" />
-
-    <TextView
         android:id="@+id/allergenes"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -108,14 +112,6 @@
         android:text="allergenes"
         app:layout_constraintEnd_toEndOf="@+id/isvegan"
         app:layout_constraintTop_toBottomOf="@+id/isvegan" />
-
-    <TextView
-        android:id="@+id/participants"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="participants"
-        app:layout_constraintEnd_toEndOf="@+id/maxamountofparticipants"
-        app:layout_constraintTop_toBottomOf="@+id/maxamountofparticipants" />
 
 
 </android.support.constraint.ConstraintLayout>

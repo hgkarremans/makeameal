@@ -5,44 +5,76 @@ import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.LinearLayout;
 
 import com.example.makeameal.Domain.Meal;
 
 import java.util.ArrayList;
 
-public class MealListActivity extends AppCompatActivity implements MealTask.RandomMealListenener{
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
+import retrofit2.Retrofit;
+import retrofit2.converter.gson.GsonConverterFactory;
+
+public class MealListActivity extends AppCompatActivity{
     private ArrayList<Meal> meals;
     private RecyclerView mealsRecyclerView;
+    private MyApi myApi;
     private MealListAdapter mealListAdapter;
-    private String mealUrl = "https://shareameal-api.herokuapp.com/api/meal/";
+    private String baseUrl = "https://shareameal-api.herokuapp.com/";
     private static final String TAG = MealListActivity.class.getSimpleName();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_meal_list);
-        Log.d(TAG, "Task aanmaken en starten");
-        MealTask task = new MealTask(this);
+        //initialize the recyclerview
+        mealsRecyclerView = findViewById(R.id.meals_list);
+        //create arraylist to store meals
+        meals = new ArrayList<>();
 
-        task.execute(mealUrl);
-        Log.d(TAG, "Task gestart");
-        this.meals = mealListAdapter.setMeals();
-        //de code kapt er mee bij het aanmaken van de lijst met meals
-        Log.d(TAG, "werkt die nog?");
-        Log.d(TAG, "Meals = " + meals);
-        Log.d(TAG, "ConsumeList created, amount = " + meals.size());
+        //create a view data method
+        viewJsonData();
+    }
 
-        this.mealsRecyclerView = findViewById(R.id.meals_list);
-        this.mealListAdapter = new MealListAdapter(meals, this);
+    private void viewJsonData() {
+        //create retrofit instance
+        Retrofit retrofit = new Retrofit.Builder()
+                .baseUrl(baseUrl)
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
 
-        this.mealsRecyclerView.setAdapter(mealListAdapter);
-        this.mealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        //retrofit api
+        myApi = retrofit.create(MyApi.class);
+        //display all data from api
+        Call<MealList> arrayListCall = myApi.getMeals();
+        System.out.println("call made");
+        arrayListCall.enqueue(new Callback<MealList>() {
+            @Override
+            public void onResponse(Call<MealList> call, Response<MealList> response) {
+                System.out.println("got a response");
+                meals = response.body().getResult();
+                //for loop for data display
+                for (int i = 0; i < meals.size(); i++) {
+                    mealListAdapter = new MealListAdapter(meals, MealListActivity.this);
+                    //implementation
+                    LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MealListActivity.this, LinearLayoutManager.VERTICAL, false);
+                    //set layout manager
+                    mealsRecyclerView.setLayoutManager(linearLayoutManager);
+                    //set adapter
+                    mealsRecyclerView.setAdapter(mealListAdapter);
+            }
+                }
+
+            @Override
+            public void onFailure(Call<MealList> call, Throwable t) {
+                System.out.println("failed to get response");
+                System.out.println(t.getMessage());
+            }
+        });
+
     }
 
 
-    @Override
-    public void onMealAvailable(ArrayList<Meal> meals) {
-        Log.d(TAG, meals.size() + " meals ontvangen");
-        Log.d(TAG, meals.get(0).toString());
-    }
 }

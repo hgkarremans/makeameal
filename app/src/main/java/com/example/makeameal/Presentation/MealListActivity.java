@@ -1,4 +1,4 @@
-package com.example.makeameal;
+package com.example.makeameal.Presentation;
 
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -13,17 +13,19 @@ import android.widget.Toast;
 
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.LiveData;
+import androidx.lifecycle.ViewModelProvider;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.makeameal.Application.MealList;
 import com.example.makeameal.Application.NetworkUtils;
 import com.example.makeameal.Datastorage.MealDAO;
 import com.example.makeameal.Datastorage.MealDatabase;
 import com.example.makeameal.Datastorage.MyApi;
 import com.example.makeameal.Domain.Meal;
+import com.example.makeameal.Logic.MealViewModel;
+import com.example.makeameal.R;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -41,6 +43,7 @@ public class MealListActivity extends AppCompatActivity {
     private MealListAdapter mealListAdapter;
     private String baseUrl = "https://shareameal-api.herokuapp.com/";
     private static final String TAG = MealListActivity.class.getSimpleName();
+    private MealViewModel mealViewModel;
 
 
 
@@ -61,8 +64,10 @@ public class MealListActivity extends AppCompatActivity {
         //create arraylist to store meals
         meals = new ArrayList<>();
 
-        //check for wifi connection:
 
+
+
+        //check for wifi connection:
         boolean isWifiConnected = NetworkUtils.isWifiConnected(this);
         if (isWifiConnected) {
             // Wi-Fi is connected
@@ -72,33 +77,15 @@ public class MealListActivity extends AppCompatActivity {
         } else {
             // Wi-Fi is not connected
             Log.d(TAG, "onCreate: wifi not connected");
-            MealDatabase database = MealDatabase.getDbInstance(this);
-
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    List<Meal> meals = database.mealDAO().getAll();
-
-                    runOnUiThread(new Runnable() {
-                        @Override
-                        public void run() {
-                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MealListActivity.this, LinearLayoutManager.VERTICAL, false);
-                            //set layout manager
-                            mealsRecyclerView.setLayoutManager(linearLayoutManager);
-                            mealsRecyclerView.setAdapter(new MealListAdapter((ArrayList<Meal>) meals, MealListActivity.this));
-
-
-
-                        }
-                    });
-                }
-            }).start();
-
-            mealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-            MealListAdapter adapter = new MealListAdapter(meals, MealListActivity.this);
-            mealsRecyclerView.setAdapter(adapter);
+            mealViewModel = new ViewModelProvider(this).get(MealViewModel.class);
+            mealViewModel.getAllMeals().observe(this, meals -> {
+                mealListAdapter = new MealListAdapter((ArrayList<Meal>) meals, MealListActivity.this);
+                mealsRecyclerView.setAdapter(mealListAdapter);
+                mealsRecyclerView.setLayoutManager(new LinearLayoutManager(MealListActivity.this));
+            });
             Toast toast = Toast.makeText(MealListActivity.this, "Geopend uit opslag (offline)", Toast.LENGTH_SHORT);
             toast.show();
+
         }
     }
 
@@ -120,9 +107,6 @@ public class MealListActivity extends AppCompatActivity {
                 System.out.println("got a response");
                 meals = response.body().getResult();
                 //add to database
-//                MealDatabase database1 = MealDatabase.getDbInstance(MealListActivity.this);
-//                MealDAO mealDAO = database1.mealDAO();
-//                mealDAO.insertAll(meals);
                 MealDatabase database = MealDatabase.getDbInstance(MealListActivity.this);
                 MealDAO mealDAO = database.mealDAO();
                 mealDAO.nukeTable();
@@ -150,8 +134,6 @@ public class MealListActivity extends AppCompatActivity {
                 System.out.println(t.getMessage());
             }
         });
-
-
     }
 
     @Override

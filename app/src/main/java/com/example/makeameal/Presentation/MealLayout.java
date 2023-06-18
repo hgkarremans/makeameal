@@ -1,4 +1,4 @@
-package com.example.makeameal;
+package com.example.makeameal.Presentation;
 
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
@@ -15,6 +15,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.makeameal.Application.Formatters;
 import com.example.makeameal.Domain.Meal;
+import com.example.makeameal.R;
 import com.squareup.picasso.Picasso;
 
 import org.w3c.dom.Text;

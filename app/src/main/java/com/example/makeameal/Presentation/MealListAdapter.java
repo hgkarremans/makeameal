@@ -1,4 +1,4 @@
-package com.example.makeameal;
+package com.example.makeameal.Presentation;
 
 import android.content.Context;
 import android.content.Intent;
@@ -14,6 +14,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.makeameal.Domain.Meal;
+import com.example.makeameal.R;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;

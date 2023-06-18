@@ -1,4 +1,4 @@
-package com.example.makeameal;
+package com.example.makeameal.Application;
 
 import com.example.makeameal.Domain.Meal;
 import com.google.gson.annotations.Expose;

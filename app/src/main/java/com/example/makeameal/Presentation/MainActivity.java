@@ -1,4 +1,4 @@
-package com.example.makeameal;
+package com.example.makeameal.Presentation;
 
 
 
@@ -13,7 +13,8 @@ import android.widget.EditText;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import java.util.ArrayList;
+import com.example.makeameal.R;
+
 import java.util.Objects;
 
 public class MainActivity extends AppCompatActivity {

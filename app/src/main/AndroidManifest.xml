@@ -16,13 +16,13 @@
         android:theme="@style/Theme.MakeAMeal"
         tools:targetApi="31">
         <activity
-            android:name=".MealLayout"
+            android:name=".Presentation.MealLayout"
             android:exported="false" />
         <activity
-            android:name=".MealListActivity"
+            android:name=".Presentation.MealListActivity"
             android:exported="false" />
         <activity
-            android:name=".MainActivity"
+            android:name=".Presentation.MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

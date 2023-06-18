@@ -18,9 +18,12 @@ public interface MealDAO {
     @Insert
     void insertAll(ArrayList<Meal> meals);
 
+    @Insert
+    void insert(Meal meal);
+
 
     @Query("SELECT * FROM meal")
-    List<Meal> getAll();
+    LiveData<List<Meal>> getAll();
 
     @Query("DELETE FROM meal")
     public void nukeTable();

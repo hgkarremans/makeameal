@@ -24,6 +24,8 @@ public class MealViewModel extends AndroidViewModel {
     public LiveData<List<Meal>> getAllMeals() {
         return mealList;
     }
+
+
     public void insert(Meal meal) {
         mealRepository.insert(meal);
     }

@@ -9,6 +9,8 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 
@@ -64,9 +66,6 @@ public class MealListActivity extends AppCompatActivity {
         //create arraylist to store meals
         meals = new ArrayList<>();
 
-
-
-
         //check for wifi connection:
         boolean isWifiConnected = NetworkUtils.isWifiConnected(this);
         if (isWifiConnected) {
@@ -74,6 +73,7 @@ public class MealListActivity extends AppCompatActivity {
             Log.d(TAG, "onCreate: wifi connected");
             //create a view data method
             viewJsonData();
+
         } else {
             // Wi-Fi is not connected
             Log.d(TAG, "onCreate: wifi not connected");
@@ -87,6 +87,56 @@ public class MealListActivity extends AppCompatActivity {
             toast.show();
 
         }
+        Button vega = findViewById(R.id.vega_button);
+        ArrayList<Meal> veganMeals = new ArrayList<>();
+        Button vegan = findViewById(R.id.vegan_button);
+        ArrayList<Meal> vegetarianMeals = new ArrayList<>();
+        Button clear = findViewById(R.id.clear_filter_button);
+        vegan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                veganMeals.clear();
+                for(int i = 0; i < meals.size(); i++){
+                    if(meals.get(i).getVegan() == true){
+                        veganMeals.add(meals.get(i));
+                    }
+                }
+                if (veganMeals.size() == 0){
+                    Toast toast = Toast.makeText(MealListActivity.this, "Geen vegan gerechten gevonden", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                mealListAdapter = new MealListAdapter(veganMeals, MealListActivity.this);
+                mealsRecyclerView.setAdapter(mealListAdapter);
+            }
+        });
+        vega.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                vegetarianMeals.clear();
+                for(int i = 0; i < meals.size(); i++){
+                    if(meals.get(i).getVega() == true){
+                        vegetarianMeals.add(meals.get(i));
+                    }
+                }
+                if (vegetarianMeals.size() == 0){
+                    Toast toast = Toast.makeText(MealListActivity.this, "Geen vegetarische gerechten gevonden", Toast.LENGTH_SHORT);
+                    toast.show();
+                }
+                mealListAdapter = new MealListAdapter(vegetarianMeals, MealListActivity.this);
+                mealsRecyclerView.setAdapter(mealListAdapter);
+            }
+        });
+        clear.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mealListAdapter = new MealListAdapter(meals, MealListActivity.this);
+                mealsRecyclerView.setAdapter(mealListAdapter);
+                Toast toast = Toast.makeText(MealListActivity.this, "Filter verwijderd", Toast.LENGTH_SHORT);
+                toast.show();
+            }
+
+        });
+
     }
 
     private void viewJsonData() {

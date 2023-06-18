@@ -28,6 +28,7 @@ public interface MealDAO {
     @Query("DELETE FROM meal")
     public void nukeTable();
 
+
     @Delete
     void delete (Meal meal);
 

@@ -1,11 +1,9 @@
 package com.example.makeameal;
 
-import android.arch.lifecycle.ViewModelProvider;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
+
 import android.text.Spannable;
 import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
@@ -13,17 +11,21 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.lifecycle.ViewModelProviders;
+import androidx.lifecycle.LiveData;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.makeameal.Application.NetworkUtils;
 import com.example.makeameal.Datastorage.MealDAO;
 import com.example.makeameal.Datastorage.MealDatabase;
-import com.example.makeameal.Datastorage.MealViewModel;
 import com.example.makeameal.Datastorage.MyApi;
 import com.example.makeameal.Domain.Meal;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 import retrofit2.Call;
@@ -39,9 +41,6 @@ public class MealListActivity extends AppCompatActivity {
     private MealListAdapter mealListAdapter;
     private String baseUrl = "https://shareameal-api.herokuapp.com/";
     private static final String TAG = MealListActivity.class.getSimpleName();
-    private MealViewModel mealViewModel;
-
-
 
 
 
@@ -62,10 +61,6 @@ public class MealListActivity extends AppCompatActivity {
         //create arraylist to store meals
         meals = new ArrayList<>();
 
-//        mealViewModel = ViewModelProviders.of(this).get(MealViewModel.class);
-//        mealViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(MealViewModel.class);
-
-
         //check for wifi connection:
 
         boolean isWifiConnected = NetworkUtils.isWifiConnected(this);
@@ -77,38 +72,34 @@ public class MealListActivity extends AppCompatActivity {
         } else {
             // Wi-Fi is not connected
             Log.d(TAG, "onCreate: wifi not connected");
-//            MealDatabase database = MealDatabase.getDbInstance(this);
-//
-//            new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    LiveData meals = database.mealDAO().getAll();
-//
-//                    runOnUiThread(new Runnable() {
-//                        @Override
-//                        public void run() {
-//                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MealListActivity.this, LinearLayoutManager.VERTICAL, false);
-//                            //set layout manager
-//                            mealsRecyclerView.setLayoutManager(linearLayoutManager);
-//                            mealsRecyclerView.setAdapter(new MealListAdapter(meals, MealListActivity.this));
-//
-//
-//
-//                        }
-//                    });
-//                }
-//            }).start();
+            MealDatabase database = MealDatabase.getDbInstance(this);
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    List<Meal> meals = database.mealDAO().getAll();
+
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MealListActivity.this, LinearLayoutManager.VERTICAL, false);
+                            //set layout manager
+                            mealsRecyclerView.setLayoutManager(linearLayoutManager);
+                            mealsRecyclerView.setAdapter(new MealListAdapter((ArrayList<Meal>) meals, MealListActivity.this));
 
 
+
+                        }
+                    });
+                }
+            }).start();
 
             mealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
             MealListAdapter adapter = new MealListAdapter(meals, MealListActivity.this);
             mealsRecyclerView.setAdapter(adapter);
-            Toast toast = Toast.makeText(MealListActivity.this, meals.size() + " gerechten offline geladen.", Toast.LENGTH_SHORT);
+            Toast toast = Toast.makeText(MealListActivity.this, "Geopend uit opslag (offline)", Toast.LENGTH_SHORT);
             toast.show();
         }
-
-
     }
 
     private void viewJsonData() {
@@ -129,24 +120,27 @@ public class MealListActivity extends AppCompatActivity {
                 System.out.println("got a response");
                 meals = response.body().getResult();
                 //add to database
-                MealDatabase database1 = MealDatabase.getDbInstance(MealListActivity.this);
-                MealDAO mealDAO = database1.mealDAO();
-                for (int i = 0; i < meals.size(); i++) {
-                    Meal meal = meals.get(i);
-                    mealDAO.insert(meal);
-                }
+//                MealDatabase database1 = MealDatabase.getDbInstance(MealListActivity.this);
+//                MealDAO mealDAO = database1.mealDAO();
+//                mealDAO.insertAll(meals);
+                MealDatabase database = MealDatabase.getDbInstance(MealListActivity.this);
+                MealDAO mealDAO = database.mealDAO();
+                mealDAO.nukeTable();
+                mealDAO.insertAll(meals);
                 Log.d(TAG, "posted to room database");
-                //for loop for data display
-                for (int i = 0; i < meals.size(); i++) {
+
+                    //create adapter
+                    Log.d(TAG, "onResponse: " + meals.get(0).getName());
                     mealListAdapter = new MealListAdapter(meals, MealListActivity.this);
                     //implementation
                     LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MealListActivity.this, LinearLayoutManager.VERTICAL, false);
                     //set layout manager
                     mealsRecyclerView.setLayoutManager(linearLayoutManager);
+                     System.out.println(mealListAdapter.getItemCount());
                     //set adapter
                     mealsRecyclerView.setAdapter(mealListAdapter);
-            }
-                Toast toast = Toast.makeText(MealListActivity.this, meals.size() + " gerechten geladen.", Toast.LENGTH_SHORT);
+
+                Toast toast = Toast.makeText(MealListActivity.this, meals.size() + " gerechten opgeslagen", Toast.LENGTH_SHORT);
                 toast.show();
                 }
 
@@ -169,8 +163,5 @@ public class MealListActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    @Override
-    public void onPointerCaptureChanged(boolean hasCapture) {
-        super.onPointerCaptureChanged(hasCapture);
-    }
+
 }

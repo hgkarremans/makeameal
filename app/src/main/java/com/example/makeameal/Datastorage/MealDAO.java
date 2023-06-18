@@ -10,18 +10,20 @@ import androidx.room.Query;
 
 import com.example.makeameal.Domain.Meal;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.List;
 
 @Dao
 public interface MealDAO {
     @Insert
-    void insert(Meal meal);
+    void insertAll(ArrayList<Meal> meals);
 
 
     @Query("SELECT * FROM meal")
-    LiveData<List<Meal>> getAll();
+    List<Meal> getAll();
+
+    @Query("DELETE FROM meal")
+    public void nukeTable();
 
     @Delete
     void delete (Meal meal);

@@ -2,7 +2,7 @@ package com.example.makeameal;
 
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.text.Spannable;
 import android.text.SpannableString;
@@ -10,6 +10,8 @@ import android.text.style.ForegroundColorSpan;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import com.example.makeameal.Application.Formatters;
 import com.example.makeameal.Domain.Meal;

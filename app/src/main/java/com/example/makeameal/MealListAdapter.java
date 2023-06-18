@@ -2,14 +2,16 @@ package com.example.makeameal;
 
 import android.content.Context;
 import android.content.Intent;
-import android.support.annotation.NonNull;
-import android.support.v7.widget.RecyclerView;
+
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.makeameal.Domain.Meal;
 import com.squareup.picasso.Picasso;
@@ -23,7 +25,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
     private final String TAG = Meal.class.getSimpleName();
 
     public MealListAdapter(ArrayList<Meal> meals, Context context) {
-        this.meals = this.meals;
+        this.meals = meals;
 
     }
 
@@ -64,13 +66,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
 
     @Override
     public int getItemCount() {
-        if (meals != null) {
-            return meals.size();
-        }
-        else {
-            return 0;
-        }
-
+        return meals.size();
     }
     class MealViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView name;

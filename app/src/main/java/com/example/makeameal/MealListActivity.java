@@ -1,10 +1,8 @@
 package com.example.makeameal;
 
-import android.graphics.Color;
-import android.graphics.PorterDuff;
+import android.arch.lifecycle.ViewModelProvider;
 import android.graphics.drawable.ColorDrawable;
 import android.graphics.drawable.Drawable;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,8 +11,16 @@ import android.text.SpannableString;
 import android.text.style.ForegroundColorSpan;
 import android.util.Log;
 import android.view.MenuItem;
-import android.widget.LinearLayout;
+import android.widget.Toast;
 
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.lifecycle.ViewModelProviders;
+
+import com.example.makeameal.Application.NetworkUtils;
+import com.example.makeameal.Datastorage.MealDAO;
+import com.example.makeameal.Datastorage.MealDatabase;
+import com.example.makeameal.Datastorage.MealViewModel;
+import com.example.makeameal.Datastorage.MyApi;
 import com.example.makeameal.Domain.Meal;
 
 import java.util.ArrayList;
@@ -26,13 +32,18 @@ import retrofit2.Response;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class MealListActivity extends AppCompatActivity{
+public class MealListActivity extends AppCompatActivity {
     private ArrayList<Meal> meals;
     private RecyclerView mealsRecyclerView;
     private MyApi myApi;
     private MealListAdapter mealListAdapter;
     private String baseUrl = "https://shareameal-api.herokuapp.com/";
     private static final String TAG = MealListActivity.class.getSimpleName();
+    private MealViewModel mealViewModel;
+
+
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -51,8 +62,53 @@ public class MealListActivity extends AppCompatActivity{
         //create arraylist to store meals
         meals = new ArrayList<>();
 
-        //create a view data method
-        viewJsonData();
+//        mealViewModel = ViewModelProviders.of(this).get(MealViewModel.class);
+//        mealViewModel = new ViewModelProvider(this, new ViewModelProvider.AndroidViewModelFactory(getApplication())).get(MealViewModel.class);
+
+
+        //check for wifi connection:
+
+        boolean isWifiConnected = NetworkUtils.isWifiConnected(this);
+        if (isWifiConnected) {
+            // Wi-Fi is connected
+            Log.d(TAG, "onCreate: wifi connected");
+            //create a view data method
+            viewJsonData();
+        } else {
+            // Wi-Fi is not connected
+            Log.d(TAG, "onCreate: wifi not connected");
+//            MealDatabase database = MealDatabase.getDbInstance(this);
+//
+//            new Thread(new Runnable() {
+//                @Override
+//                public void run() {
+//                    LiveData meals = database.mealDAO().getAll();
+//
+//                    runOnUiThread(new Runnable() {
+//                        @Override
+//                        public void run() {
+//                            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(MealListActivity.this, LinearLayoutManager.VERTICAL, false);
+//                            //set layout manager
+//                            mealsRecyclerView.setLayoutManager(linearLayoutManager);
+//                            mealsRecyclerView.setAdapter(new MealListAdapter(meals, MealListActivity.this));
+//
+//
+//
+//                        }
+//                    });
+//                }
+//            }).start();
+
+
+
+            mealsRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+            MealListAdapter adapter = new MealListAdapter(meals, MealListActivity.this);
+            mealsRecyclerView.setAdapter(adapter);
+            Toast toast = Toast.makeText(MealListActivity.this, meals.size() + " gerechten offline geladen.", Toast.LENGTH_SHORT);
+            toast.show();
+        }
+
+
     }
 
     private void viewJsonData() {
@@ -72,6 +128,14 @@ public class MealListActivity extends AppCompatActivity{
             public void onResponse(Call<MealList> call, Response<MealList> response) {
                 System.out.println("got a response");
                 meals = response.body().getResult();
+                //add to database
+                MealDatabase database1 = MealDatabase.getDbInstance(MealListActivity.this);
+                MealDAO mealDAO = database1.mealDAO();
+                for (int i = 0; i < meals.size(); i++) {
+                    Meal meal = meals.get(i);
+                    mealDAO.insert(meal);
+                }
+                Log.d(TAG, "posted to room database");
                 //for loop for data display
                 for (int i = 0; i < meals.size(); i++) {
                     mealListAdapter = new MealListAdapter(meals, MealListActivity.this);
@@ -82,6 +146,8 @@ public class MealListActivity extends AppCompatActivity{
                     //set adapter
                     mealsRecyclerView.setAdapter(mealListAdapter);
             }
+                Toast toast = Toast.makeText(MealListActivity.this, meals.size() + " gerechten geladen.", Toast.LENGTH_SHORT);
+                toast.show();
                 }
 
             @Override
@@ -103,4 +169,8 @@ public class MealListActivity extends AppCompatActivity{
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    public void onPointerCaptureChanged(boolean hasCapture) {
+        super.onPointerCaptureChanged(hasCapture);
+    }
 }

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
-import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -24,7 +23,7 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
     private final String TAG = Meal.class.getSimpleName();
 
     public MealListAdapter(ArrayList<Meal> meals, Context context) {
-        this.meals = meals;
+        this.meals = this.meals;
 
     }
 
@@ -65,7 +64,13 @@ public class MealListAdapter extends RecyclerView.Adapter<MealListAdapter.MealVi
 
     @Override
     public int getItemCount() {
-        return meals.size();
+        if (meals != null) {
+            return meals.size();
+        }
+        else {
+            return 0;
+        }
+
     }
     class MealViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         TextView name;

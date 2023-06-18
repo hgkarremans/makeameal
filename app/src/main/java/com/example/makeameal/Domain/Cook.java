@@ -1,13 +1,16 @@
 package com.example.makeameal.Domain;
 
 
+import androidx.room.Entity;
+import androidx.room.PrimaryKey;
+
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
 import java.util.List;
 
-
+@Entity
 public class Cook implements Serializable {
 
     @SerializedName("roles")
@@ -21,6 +24,7 @@ public class Cook implements Serializable {
     private String phoneNumber;
     @SerializedName("id")
     @Expose
+    @PrimaryKey (autoGenerate = true)
     private Integer id;
     @SerializedName("firstName")
     @Expose

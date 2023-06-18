@@ -57,9 +57,9 @@ public class MealLayout extends AppCompatActivity {
         mealName.setText(passedMeal.getName());
         mealDescription.setText(passedMeal.getDescription());
         mealPrice.setText("Prijs €" + passedMeal.getPrice());
-        isVega.setText("Vega " + Formatters.returnCheckmarkOrX(passedMeal.getIsVega()));
-        isVegan.setText("Vegan " + Formatters.returnCheckmarkOrX(passedMeal.getIsVegan()));
-        isToTakeHome.setText("Mee naar huis te nemen " + Formatters.returnCheckmarkOrX(passedMeal.getIsToTakeHome()));
+        isVega.setText("Vega " + Formatters.returnCheckmarkOrX(passedMeal.getVega()));
+        isVegan.setText("Vegan " + Formatters.returnCheckmarkOrX(passedMeal.getVegan()));
+        isToTakeHome.setText("Mee naar huis te nemen " + Formatters.returnCheckmarkOrX(passedMeal.getToTakeHome()));
         if (passedMeal.getAllergenes().size() == 0)
             allergenes.setText("Allergenen: Geen allergenen");
         else {

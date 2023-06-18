@@ -5,8 +5,7 @@
     <string name="type_in_username">Type in username</string>
     <string name="log_in_btn">Log in</string>
     <string name="name_of_cook">Name of cook</string>
-    <string name="mealname_label">Mealname</string>
-    <string name="cityname_label">Cityname</string>
     <string name="price">0.00</string>
     <string name="lorem_ipsum_dolor">lorem ipsum dolor</string>
+    <string name="mealname_label">mealname</string>
 </resources>

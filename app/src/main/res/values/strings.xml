@@ -12,4 +12,5 @@
     <string name="alleen_vegetarisch">Vegetarisch</string>
     <string name="filter_op">Filter op:</string>
     <string name="verwijder_filter">Verwijder filter</string>
+    <string name="meal_starting_picture">Meal_starting_picture</string>
 </resources>

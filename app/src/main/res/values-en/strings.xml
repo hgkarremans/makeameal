@@ -1,16 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="app_name" translatable="false">MakeAMeal</string>
-    <string name="welcome_login_screen">Welkom!</string>
-    <string name="user_label">Gebruiker</string>
-    <string name="type_in_username">Type gebruikersnaam</string>
+    <string name="welcome_login_screen">Welcome!</string>
+    <string name="user_label">User</string>
+    <string name="type_in_username">Type username</string>
     <string name="log_in_btn">Log in</string>
     <string name="name_of_cook" translatable="false">Name of cook</string>
     <string name="price" translatable="false">0.00</string>
     <string name="lorem_ipsum_dolor" translatable="false">lorem ipsum dolor</string>
     <string name="mealname_label" translatable="false">mealname</string>
-    <string name="alleen_veganistisch">Veganistisch</string>
-    <string name="alleen_vegetarisch">Vegetarisch</string>
-    <string name="filter_op">Filter op:</string>
-    <string name="verwijder_filter">Verwijder filter</string>
+    <string name="alleen_veganistisch">Vegan</string>
+    <string name="alleen_vegetarisch">vegetarian</string>
+    <string name="filter_op">Filter on:</string>
+    <string name="verwijder_filter">Remove filter</string>
     <string name="meal_starting_picture" translatable="false">Meal_starting_picture</string>
 </resources>

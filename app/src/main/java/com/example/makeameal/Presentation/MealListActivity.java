@@ -155,7 +155,7 @@ public class MealListActivity extends AppCompatActivity {
             @Override
             public void onResponse(Call<MealList> call, Response<MealList> response) {
                 System.out.println("got a response");
-                c
+
                 meals = response.body().getResult();
                 //add to database
                 MealDatabase database = MealDatabase.getDbInstance(MealListActivity.this);

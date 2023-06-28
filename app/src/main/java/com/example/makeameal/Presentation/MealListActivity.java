@@ -79,6 +79,7 @@ public class MealListActivity extends AppCompatActivity {
             Log.d(TAG, "onCreate: wifi not connected");
             mealViewModel = new ViewModelProvider(this).get(MealViewModel.class);
             mealViewModel.getAllMeals().observe(this, meals -> {
+                this.meals = (ArrayList<Meal>) meals;
                 mealListAdapter = new MealListAdapter((ArrayList<Meal>) meals, MealListActivity.this);
                 mealsRecyclerView.setAdapter(mealListAdapter);
                 mealsRecyclerView.setLayoutManager(new LinearLayoutManager(MealListActivity.this));
